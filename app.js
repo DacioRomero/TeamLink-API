@@ -17,7 +17,7 @@ app.engine('hbs', exphbs({
     layoutsDir: path.join(__dirname, '/views/layouts/'),
     partialsDir: path.join(__dirname, '/views/partials/'),
     defaultLayout: 'main',
-    helpers: Object.assign({ repeat: require('handlebars-helper-repeat') }, require('handlebars-helpers')())
+    helpers: require('handlebars-helpers')()
 }));
 
 app.set('views', path.join(__dirname, '/views'));
