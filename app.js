@@ -32,6 +32,9 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/teamlink', { us
 
 // ROUTES
 require('./controllers/players')(app)
+app.get('/', (req, res) => {
+    res.render('home');
+});
 
 // LISTENER
 if (require.main === module) {

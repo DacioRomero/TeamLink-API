@@ -4,7 +4,7 @@ const roles = Player.schema.path('role').enumValues;
 
 module.exports = app => {
     // INDEX Player
-    app.get('/', (req, res) => {
+    app.get('/players', (req, res) => {
         Player.find()
         .then(players => {
             res.render('players-index', { players: players });
@@ -21,7 +21,7 @@ module.exports = app => {
     app.post('/players', (req, res) => {
         Player.create(req.body)
         .then(player => {
-            res.redirect('/');
+            res.redirect('/players');
         })
         .catch(console.error);
     });
@@ -48,7 +48,7 @@ module.exports = app => {
     app.put('/players/:id', (req, res) => {
         Player.findByIdAndUpdate(req.params.id, req.body)
         .then(player => {
-            res.redirect('/');
+            res.redirect('/players');
         })
         .catch(console.error)
     });
@@ -57,7 +57,7 @@ module.exports = app => {
     app.delete('/players/:id', (req, res) => {
         Player.findByIdAndRemove(req.params.id)
         .then(player => {
-            res.redirect('/');
+            res.redirect('/players');
         })
         .catch(console.error)
     });
