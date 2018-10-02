@@ -1,7 +1,7 @@
 <!-- views/partials/player.hbs -->
 <div class="card h-100">
     <a href="/players/{{player._id}}">
-        <div class="card-img-top player-icon" style="background-image: url({{player.iconURL}})"></div>
+        <div class="card-img-top player-icon" style="background-image: url({{#if player.iconURL}}{{player.iconURL}}{{else}}https://d1u1mce87gyfbn.cloudfront.net/hero/mccree/icon-portrait.png{{/if}})"></div>
     </a>
     <div class="card-body">
         <h5 class="card-title">{{player.battletag}}</h5>
