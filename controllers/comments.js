@@ -3,7 +3,7 @@ const Comment = require('../models/comment');
 module.exports = app => {
     // NEW Player
     app.get('/players/:playerId/comments/new', (req, res) => {
-       res.render('comments-new', { playerId: req.params.playerId });
+        res.render('comments-new', { playerId: req.params.playerId });
     });
 
     // SHOW Comment
@@ -36,9 +36,14 @@ module.exports = app => {
 
     // CREATE Comment
     app.post('/api/players/:playerId/comments', (req, res) => {
+        console.log(req.body)
         Comment.create(req.body)
-        .then(res.status(201).send)
-        .catch(res.status(400).send);
+        .then(comment => {
+            res.status(200).send(comment);
+        }).catch((err) => {
+            console.error(err);
+            res.status(400).send(err);
+        });;
     });
 
     app.post('/players/:playerId/comments', (req, res) => {
@@ -51,9 +56,14 @@ module.exports = app => {
 
     // DESTROY Comment
     app.delete('/api/players/:playerId/comments/:id', (req, res) => {
-        Comment.findByIdAndRemove(req.params.id)
-        .then(res.status(201).send)
-        .catch(res.status(400).send);
+        let id = req.params.id
+        Comment.findByIdAndRemove(id)
+        .then(comment => {
+            res.status(200).send(comment);
+        }).catch((err) => {
+            console.error(err);
+            res.status(400).send(err);
+        });
     });
 
     app.delete('/players/:playerId/comments/:id', (req, res) => {
@@ -67,8 +77,17 @@ module.exports = app => {
     // UPDATE Comment
     app.put('/api/players/:playerId/comments/:id', (req, res) => {
         Comment.findByIdAndUpdate(req.params.id, req.body)
-        .then(res.status(201).send)
-        .catch(res.status(400).send);
+        .then(comment => {
+            if(req.body.render) {
+                res.render('partials/comment-card', { layout: false, comment: comment });
+            }
+            else {
+                res.status(200).send(comment);
+            }
+        }).catch((err) => {
+            console.error(err);
+            res.status(400).send(err);
+        });
     });
 
     app.put('/players/:playerId/comments/:id', (req, res) => {
