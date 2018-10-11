@@ -3,8 +3,21 @@
         <a href="/players/{{playerId}}">Back to Player</a>
     </div>
     <div class="col-6">
-        {{#each comments}}
-        {{> comment-card comment=this }}
-        {{/each}}
+        <a href="/players/{{player._id}}/comments"><h2>Comments</h2></a>
+    </div>
+    <div class="col-6 text-right my-auto">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#commentModal">New Comment</button>
+    </div>
+    <div class="col-12">
+        <div class="row" id="comments">
+            {{#each comments}}
+            <div class="col-4">
+                <a class="btn btn-warning deleteComment" data-comment-id="{{this._id}}"><i class="fas fa-trash"></i></a>
+                {{> comment-card comment=this }}
+            </div>
+            {{/each}}
+        </div>
     </div>
 </div>
+
+{{> comment-modal }}

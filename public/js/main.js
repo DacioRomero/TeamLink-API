@@ -1,10 +1,9 @@
 // public/js/main.js
 var comments = document.getElementById("comments")
-var commentForm = document.getElementById("commentModal").querySelector("form");
-commentForm.reset()
-var playerId = window.location.pathname.split('/')
-playerId = playerId[playerId.length - 1]
-console.log(playerId)
+var commentModal = document.getElementById("commentModal")
+var commentForm = commentModal.querySelector("form");
+var playerId = commentModal.getAttribute('data-player-id');
+commentForm.reset();
 
 comments.addEventListener('click', function (e) {
     var deleteButton = e.target.closest('.deleteComment') || e.target;
