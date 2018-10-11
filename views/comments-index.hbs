@@ -1,0 +1,10 @@
+<div class="row">
+    <div class="col-12">
+        <a href="/players/{{playerId}}">Back to Player</a>
+    </div>
+    <div class="col-6">
+        {{#each comments}}
+        {{> comment-card comment=this }}
+        {{/each}}
+    </div>
+</div>

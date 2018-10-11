@@ -1,17 +1,25 @@
 <!-- views/players-show.hbs -->
 <div class="row">
     <div class="col-6">
-        <a href="/players/{{player._id}}/edit" class="btn btn-primary">Edit</a>
+        <a href="/players/{{player._id}}/edit" class="btn btn-primary"><i class="fas fa-edit"></i> Edit</a>
     </div>
     <div class="col-6 text-right">
         <form action="/players/{{player._id}}?_method=DELETE" method="POST">
-            <button class="btn btn-warning" type="submit">Delete</button>
+            <button class="btn btn-warning" type="submit"><i class="fas fa-trash"></i> Delete</button>
         </form>
     </div>
     <div class="col-12">
         {{> player-card }}
     </div>
+    <div class="col-6">
+        <a href="/players/{{player._id}}/comments"><h2>Comments</h2></a>
+    </div>
+    <div class="col-6 text-right my-auto">
+        <a class="btn btn-primary" href="/players/{{player._id}}/comments/new">New</a>
+    </div>
     {{#each comments}}
-    
+    <div class="col-4">
+        {{> comment-card comment=this }}
+    </div>
     {{/each}}
 </div>

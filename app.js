@@ -32,6 +32,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/teamlink', { us
 
 // ROUTES
 require('./controllers/players')(app)
+require('./controllers/comments')(app)
 app.get('/', (req, res) => {
     res.render('home');
 });
