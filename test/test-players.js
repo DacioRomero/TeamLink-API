@@ -4,6 +4,8 @@ const server = require('../app');
 const should = chai.should();
 const Player = require('../models/player');
 
+chai.use(chaiHttp);
+
 const samplePlayer = {
     "battletag": "Dacio#11366",
     "description": "Looking to play professionally soon",
@@ -11,8 +13,6 @@ const samplePlayer = {
     "role": "Flex",
     "iconURL": "https://via.placeholder.com/200x200"
 };
-
-chai.use(chaiHttp);
 
 describe('Player', () => {
     let playerId;
