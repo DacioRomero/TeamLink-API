@@ -1,0 +1,14 @@
+<!-- view/comments-show -->
+<div class="row">
+    <div class="col-6">
+        <a href="/players/{{comment.playerId}}/comments/{{comment._id}}/edit" class="btn btn-primary"><i class="fas fa-edit"></i> Edit</a>
+    </div>
+    <div class="col-6 text-right">
+        <form action="/players/{{comment.playerId}}/comments/{{comment._id}}?_method=DELETE" method="POST">
+            <button class="btn btn-warning" type="submit"><i class="fas fa-trash"></i> Delete</button>
+        </form>
+    </div>
+    <div class="col-12">
+        {{> comment-card }}
+    </div>
+</div>

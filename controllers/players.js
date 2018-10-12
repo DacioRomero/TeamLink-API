@@ -1,5 +1,6 @@
 // controllers/players.js
 const Player = require('../models/player');
+const Comment = require('../models/comment');
 const roles = Player.schema.path('role').enumValues;
 
 module.exports = app => {
@@ -21,16 +22,19 @@ module.exports = app => {
     app.post('/players', (req, res) => {
         Player.create(req.body)
         .then(player => {
-            res.redirect('/players');
+            res.redirect(`/players/${player._id}`);
         })
         .catch(console.error);
     });
 
     // SHOW Player
     app.get('/players/:id', (req, res) => {
-        Player.findById(req.params.id)
-        .then(player => {
-            res.render('players-show', { player: player });
+        Promise.all([
+            Player.findById(req.params.id),
+            Comment.find({ playerId: req.params.id }).limit(5)
+        ])
+        .then(values => {
+            res.render('players-show', { player: values[0], comments: values[1] });
         })
         .catch(console.error);
     });
@@ -48,17 +52,20 @@ module.exports = app => {
     app.put('/players/:id', (req, res) => {
         Player.findByIdAndUpdate(req.params.id, req.body)
         .then(player => {
-            res.redirect('/players');
+            res.redirect(`/players/${req.params.id}`);
         })
-        .catch(console.error)
+        .catch(console.error);
     });
 
     // DESTROY Player
     app.delete('/players/:id', (req, res) => {
-        Player.findByIdAndRemove(req.params.id)
-        .then(player => {
+        Promise.all([
+            Player.findByIdAndRemove(req.params.id),
+            Comment.find({ playerId: req.params.id }).remove()
+        ])
+        .then(() => {
             res.redirect('/players');
         })
-        .catch(console.error)
+        .catch(console.error);
     });
 }
