@@ -6,7 +6,7 @@ const roles = Player.schema.path('role').enumValues;
 module.exports = app => {
     // INDEX Player
     app.get('/players', (req, res) => {
-        Player.find()
+        Player.find().lean()
         .then(players => {
             res.render('players-index', { players: players });
         })
@@ -30,8 +30,8 @@ module.exports = app => {
     // SHOW Player
     app.get('/players/:id', (req, res) => {
         Promise.all([
-            Player.findById(req.params.id),
-            Comment.find({ playerId: req.params.id }).limit(5)
+            Player.findById(req.params.id).lean(),
+            Comment.find({ playerId: req.params.id }).limit(5).lean()
         ])
         .then(values => {
             res.render('players-show', { player: values[0], comments: values[1] });
@@ -41,7 +41,7 @@ module.exports = app => {
 
     // EDIT Player
     app.get('/players/:id/edit', (req, res) => {
-        Player.findById(req.params.id)
+        Player.findById(req.params.id).lean()
         .then(player => {
             res.render('players-edit', { player: player, roles: roles });
         })
@@ -50,7 +50,7 @@ module.exports = app => {
 
     // UPDATE Player
     app.put('/players/:id', (req, res) => {
-        Player.findByIdAndUpdate(req.params.id, req.body)
+        Player.findByIdAndUpdate(req.params.id, req.body).lean()
         .then(player => {
             res.redirect(`/players/${req.params.id}`);
         })
@@ -60,8 +60,8 @@ module.exports = app => {
     // DESTROY Player
     app.delete('/players/:id', (req, res) => {
         Promise.all([
-            Player.findByIdAndRemove(req.params.id),
-            Comment.find({ playerId: req.params.id }).remove()
+            Player.findByIdAndRemove(req.params.id).lean(),
+            Comment.find({ playerId: req.params.id }).remove().lean()
         ])
         .then(() => {
             res.redirect('/players');
