@@ -15,15 +15,16 @@ const samplePlayer = {
 };
 
 describe('Player', () => {
-    let playerId;
-
     // TEST INDEX
     it('should index ALL players on /players GET', done => {
         chai.request(server)
         .get('/players')
-        .end((err, res) => {
+        .then(res => {
             res.should.have.status(200)
             res.should.be.html;
+        })
+        .catch(console.error)
+        .finally(() => {
             done();
         });
     });
@@ -32,24 +33,30 @@ describe('Player', () => {
     it('should display new form on /players/new GET', done => {
         chai.request(server)
         .get('/players/new')
-        .end((err, res) => {
+        .then(res => {
             res.should.have.status(200);
             res.should.be.html;
-            done()
+        })
+        .catch(console.error)
+        .finally(() => {
+            done();
         });
     });
+
+    let playerId;
 
     // TEST CREATE
     it('should create a SINGLE player on /players POST', done => {
         chai.request(server)
         .post('/players')
         .send(samplePlayer)
-        .end((err, res) => {
+        .then(res => {
             res.should.have.status(200);
             res.should.be.html;
-
-            // Create variable for reusing player document
             playerId = res.redirects[0].substring(res.redirects[0].lastIndexOf('/') + 1)
+        })
+        .catch(console.error)
+        .finally(() => {
             done();
         });
     });
@@ -58,9 +65,12 @@ describe('Player', () => {
     it('shold show a SINGLE player on /players/<id> GET', done => {
         chai.request(server)
         .get(`/players/${playerId}`)
-        .end((err, res) => {
+        .then(res => {
             res.should.have.status(200);
             res.should.be.html;
+        })
+        .catch(console.error)
+        .finally(() => {
             done();
         });
     });
@@ -69,9 +79,12 @@ describe('Player', () => {
     it('should edit a SINGLE player on /player/<id>/edit GET', done => {
         chai.request(server)
         .get(`/players/${playerId}/edit`)
-        .end((err, res) => {
+        .then(res => {
             res.should.have.status(200);
             res.should.be.html;
+        })
+        .catch(console.error)
+        .finally(() => {
             done();
         });
     });
@@ -81,20 +94,26 @@ describe('Player', () => {
         chai.request(server)
         .put(`/players/${playerId}`)
         .send({ 'rank': 200 })
-        .end((err, res) => {
+        .then(res => {
             res.should.have.status(200);
             res.should.be.html;
+        })
+        .catch(console.error)
+        .finally(() => {
             done();
-        });
+        })
     });
 
     // TEST DELETE
     it('should delete a SINGLE player on /players/<id> DELETE', done => {
         chai.request(server)
         .delete(`/players/${playerId}`)
-        .end((err, res) => {
+        .then(res => {
             res.should.have.status(200);
             res.should.be.html;
+        })
+        .catch(console.error)
+        .finally(() => {
             done();
         });
     });
