@@ -1,8 +1,10 @@
 <!-- views/players-edit.hbs -->
-<form action="/players/{{comment.playerId}}/comments/{{comment._id}}?_method=PUT" method="POST">
-    <legend>Edit Comment</legend>
-    {{> comment-fieldset }}
-    <div class="form-group text-right">
-        <button class="btn btn-primary" type="submit">Save</button>
-    </div>
-</form>
+<div class="container">
+    <form action="/players/{{comment.playerId}}/comments/{{comment._id}}?_method=PUT" method="POST">
+        <legend>Edit Comment</legend>
+        {{> comment-fieldset }}
+        <div class="form-group text-right">
+            <button class="btn btn-primary" type="submit">Save</button>
+        </div>
+    </form>    
+</div>

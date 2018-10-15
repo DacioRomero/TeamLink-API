@@ -34,7 +34,7 @@ describe('Comment', () => {
         });
     });
 
-    describe('browser', () => {
+    describe('Browser', () => {
         // TEST INDEX
         it('should index ALL comments on /players/<playerId>/comments GET', done => {
             chai.request(server)
@@ -172,7 +172,7 @@ describe('Comment', () => {
         });
     });
 
-    describe('api', () => {
+    describe('API', () => {
         // TEST INDEX
         it('should index ALL comments on /api/players/<playerId>/comments GET', done => {
             chai.request(server)
@@ -258,7 +258,7 @@ describe('Comment', () => {
         });
 
         after(done => {
-            Comment.findByIdAndRemove(commentId)
+            Comment.findByIdAndRemove(commentId).lean()
             .catch(console.error)
             .finally(() => {
                 done();

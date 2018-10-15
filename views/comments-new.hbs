@@ -1,8 +1,10 @@
-<!-- views/comment-new -->
-<form action="/players/{{playerId}}/comments" method="POST">
-    <legend>New Comment</legend>
-    {{> comment-fieldset }}
-    <div class="form-group text-right">
-        <button class="btn btn-primary" type="submit">Post</button>
-    </div>
-</form>
+<!-- views/comment-new.hbs -->
+<div class="container">
+    <form action="/players/{{playerId}}/comments" method="POST">
+        <legend>New Comment</legend>
+        {{> comment-fieldset }}
+        <div class="form-group text-right">
+            <button class="btn btn-primary" type="submit">Post</button>
+        </div>
+    </form>
+</div>

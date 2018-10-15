@@ -32,15 +32,15 @@ app.use(express.static(path.join(__dirname, '/public')));
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/teamlink', { useNewUrlParser: true });
 
 // ROUTES
-require('./controllers/players')(app)
-require('./controllers/comments')(app)
+app.use(require('./controllers/players'));
+app.use(require('./controllers/comments'));
 app.get('/', (req, res) => {
     res.render('home');
 });
 
 // LISTENER
 if (require.main === module) {
-    let port = process.env.PORT || 3000;
+    const port = process.env.PORT || 3000;
 
     app.listen(port, () => {
         console.log(`App listening on port ${port}!`);
