@@ -24,106 +24,125 @@ describe('Comment', () => {
     let playerId;
 
     before(done => {
-        let player = new Player(samplePlayer);
-        player.save();
-        playerId = player._id;
-        done();
-    });
-
-    after(done => {
-        Player.findByIdAndRemove(playerId, () => {
-            done();
-        });
-    });
-
-    // TEST INDEX
-    it('should index ALL comments on /players/<playerId>/comments GET', done => {
-        chai.request(server)
-        .get(`/players/${playerId}/comments`)
-        .end((err, res) => {
-            res.should.have.status(200);
-            res.should.be.html;
-            done();
+        Player.create(samplePlayer)
+        .then(player => {
+            playerId = player._id;
         })
-    });
-
-    // TEST NEW
-    it('should display new form on /players/<playerId>/comments/new GET', done => {
-        chai.request(server)
-        .get(`/players/${playerId}/comments`)
-        .end((err, res) => {
-            res.should.have.status(200);
-            res.should.be.html;
+        .catch(console.error)
+        .finally(() => {
             done();
         });
     });
 
-    describe('normal CRUD', () => {
+    describe('browser', () => {
+        // TEST INDEX
+        it('should index ALL comments on /players/<playerId>/comments GET', done => {
+            chai.request(server)
+            .get(`/players/${playerId}/comments`)
+            .then(res => {
+                res.should.have.status(200);
+                res.should.be.html;
+            })
+            .catch(console.error)
+            .finally(() => {
+                done();
+            });
+        });
+
+        // TEST NEW
+        it('should display new form on /players/<playerId>/comments/new GET', done => {
+            chai.request(server)
+            .get(`/players/${playerId}/comments`)
+            .then(res => {
+                res.should.have.status(200);
+                res.should.be.html;
+            })
+            .catch(console.error)
+            .finally(() => {
+                done();
+            });
+        });
+
         let commentId;
 
         // TEST INDEX
         it('should index ALL comments on /players/<playerId>/comments GET', done => {
             chai.request(server)
             .get(`/players/${playerId}/comments`)
-            .end((err, res) => {
+            .then(res => {
                 res.should.have.status(200);
                 res.should.be.html;
+            })
+            .catch(console.error)
+            .finally(() => {
                 done();
             });
         });
 
         // TEST CREATE
         it('should create a SINGLE comment on /players/<playerId>/comments POST', done => {
-            let url = `/players/${playerId}/comments`;
-            let fullComment = Object.assign({}, sampleComment, { playerId: playerId })
+            const url = `/players/${playerId}/comments`;
+            const fullComment = Object.assign({}, sampleComment, { playerId: playerId })
 
             chai.request(server)
             .post(url)
             .send(fullComment)
-            .end((err, res) => {
+            .then(res => {
                 res.should.have.status(200);
                 res.should.be.html;
                 commentId = res.redirects[0].substring(res.redirects[0].lastIndexOf('/') + 1);
+            })
+            .catch(console.error)
+            .finally(() => {
                 done();
             });
         });
 
         // TEST SHOW
         it('should show a SINGLE comment on /players/<playerId>/comments/<id> GET', done => {
-            let url = `/players/${playerId}/comments/${commentId}`;
+            const url = `/players/${playerId}/comments/${commentId}`;
 
             chai.request(server)
             .get(url)
-            .end((err, res) => {
+            .then(res => {
                 res.should.have.status(200);
                 res.should.be.html;
+            })
+            .catch(console.error)
+            .finally(() => {
                 done();
             });
         })
 
         // TEST EDIT
         it('should edit a SINGLE comment on /players/<playerId>/comments/<id> GET', done => {
-            let url = `/players/${playerId}/comments/${commentId}/edit`;
+            const url = `/players/${playerId}/comments/${commentId}/edit`;
 
             chai.request(server)
             .get(url)
-            .end((err, res) => {
+            .then(res => {
                 res.should.have.status(200);
                 res.should.be.html;
+            })
+            .catch(console.error)
+            .finally(() => {
                 done();
             });
         });
 
         // TEST UPDATE
         it('should update a SINGLE comment on /players/<playerId>/comments/<id> PUT', done => {
-            let url = `/players/${playerId}/comments/${commentId}`;
+            const url = `/players/${playerId}/comments/${commentId}`;
 
             chai.request(server)
             .put(url)
             .send({ content: 'Nevermind' })
-            .end((err, res) => {
+            .then(res => {
                 res.should.have.status(200);
                 res.should.be.html;
+            })
+            .catch(console.error)
+            .finally(() => {
                 done();
             });
         });
@@ -134,94 +153,124 @@ describe('Comment', () => {
 
             chai.request(server)
             .delete(url)
-            .end((err, res) => {
+            .then(res => {
                 res.should.have.status(200);
                 res.should.be.html;
+            })
+            .catch(console.error)
+            .finally(() => {
                 done();
             });
         });
 
         after(done => {
-            Comment.findByIdAndRemove(commentId, () => {
+            Comment.findByIdAndRemove(commentId).lean()
+            .catch(console.error)
+            .finally(() => {
                 done();
             });
         });
     });
 
-    describe('api CRUD', () => {
-        let commentId;
-
+    describe('api', () => {
         // TEST INDEX
         it('should index ALL comments on /api/players/<playerId>/comments GET', done => {
             chai.request(server)
             .get(`/api/players/${playerId}/comments`)
-            .end((err, res) => {
+            .then(res => {
                 res.should.have.status(200);
                 res.should.be.json;
+            })
+            .catch(console.error)
+            .finally(() => {
                 done();
             });
         });
 
+        let commentId;
+
         // TEST CREATE
         it('should create a SINGLE comment on /api/players/<playerId>/comments POST', done => {
-            let url = `/api/players/${playerId}/comments`;
-            let fullComment = Object.assign({}, sampleComment, { playerId: playerId })
+            const url = `/api/players/${playerId}/comments`;
+            const fullComment = Object.assign({}, sampleComment, { playerId: playerId })
 
             chai.request(server)
             .post(url)
             .send(fullComment)
-            .end((err, res) => {
+            .then(res => {
                 res.should.have.status(200);
                 res.should.be.json;
                 commentId = res.body._id
+            })
+            .catch(console.error)
+            .finally(() => {
                 done();
             });
         });
 
         // TEST SHOW
         it('should show a SINGLE comment on /api/players/<playerId>/comments/<id> GET', done => {
-            let url = `/api/players/${playerId}/comments/${commentId}`;
+            const url = `/api/players/${playerId}/comments/${commentId}`;
 
             chai.request(server)
             .get(url)
-            .end((err, res) => {
+            .then(res => {
                 res.should.have.status(200);
                 res.should.be.json;
+            })
+            .catch(console.error)
+            .finally(() => {
                 done();
             });
         })
 
         // TEST UPDATE
         it('should update a SINGLE comment on /api/players/<playerId>/comments/<id> PUT', done => {
-            let url = `/api/players/${playerId}/comments/${commentId}`;
+            const url = `/api/players/${playerId}/comments/${commentId}`;
 
             chai.request(server)
             .put(url)
             .send({ content: 'Nevermind' })
-            .end((err, res) => {
+            .then(res => {
                 res.should.have.status(200);
                 res.should.be.json;
+            })
+            .catch(console.error)
+            .finally(() => {
                 done();
             });
         });
 
         // TEST DELETE
         it('should delete a SINGLE comment on /api/players/<playerId>/comments/<id> DELETE', done => {
-            let url = `/api/players/${playerId}/comments/${commentId}`;
+            const url = `/api/players/${playerId}/comments/${commentId}`;
 
             chai.request(server)
             .delete(url)
-            .end((err, res) => {
+            .then(res => {
                 res.should.have.status(200);
                 res.should.be.json;
+            })
+            .catch(console.error)
+            .finally(() => {
                 done();
             });
         });
 
         after(done => {
-            Comment.findByIdAndRemove(commentId, () => {
+            Comment.findByIdAndRemove(commentId)
+            .catch(console.error)
+            .finally(() => {
                 done();
             });
+        });
+    });
+
+    after(done => {
+        Player.findByIdAndRemove(playerId).lean()
+        .catch(console.error)
+        .finally(() => {
+            done();
         });
     });
 });
