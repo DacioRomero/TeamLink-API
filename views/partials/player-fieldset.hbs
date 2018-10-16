@@ -2,7 +2,7 @@
 <fieldset>
     <div class="form-group">
         <label for="player-battletag">BattleTag *</label>
-        <input class="form-control" id="player-battletag" type="text" name="battletag" placeholder="Example#12345" pattern="[\u0041-\u005a\u0061-\u007a\u0041-\u005a\u0061-\u007a\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u017e\u0180-\u0188\u0190-\u0198\u01c0-\u0217\uac00-\ud7af3\u0400-\u04ff\u0500-\u052f\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\u3000-\u30FF\uFF00-\uFFEF\u4E00-\u9FAF\u0E00-\u0E7F][\u0030-\u0039\u0041-\u005a\u0061-\u007a\u0041-\u005a\u0061-\u007a\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u017e\u0180-\u0188\u0190-\u0198\u01c0-\u0217\uac00-\ud7af3\u0400-\u04ff\u0500-\u052f\u3400-\u4dbf\u4e00-\u 900-\ufaff\u3000-\u30FF\uFF00-\uFFEF\u4E00-\u9FAF\u0E00-\u0E7F]{2,11}#\d{4,5}" title="Valid battletag" value="{{player.battletag}}" required>
+        <input class="form-control" id="player-battletag" type="text" name="battletag" placeholder="Example#12345" value="{{player.battletag}}" required>
     </div>
     <div class="form-group">
         <label for="player-rank">Rank *</label>
