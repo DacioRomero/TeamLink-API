@@ -51,7 +51,7 @@ describe('Player', () => {
 
     // TEST SHOW
     it('shold show a SINGLE player on /players/<id> GET', () => {
-        chai.request(server)
+        return chai.request(server)
         .get(`/players/${playerId}`)
         .then(res => {
             res.should.have.status(200);
@@ -71,7 +71,7 @@ describe('Player', () => {
 
     // TEST UPDATE
     it('should update a SINGLE player on /players/<id> PUT', () => {
-        chai.request(server)
+        return chai.request(server)
         .put(`/players/${playerId}`)
         .send({ 'rank': 200 })
         .then(res => {
@@ -82,7 +82,7 @@ describe('Player', () => {
 
     // TEST DELETE
     it('should delete a SINGLE player on /players/<id> DELETE', () => {
-        chai.request(server)
+        return chai.request(server)
         .delete(`/players/${playerId}`)
         .then(res => {
             res.should.have.status(200);

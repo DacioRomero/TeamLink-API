@@ -49,7 +49,7 @@ describe('Team', () => {
 
     // TEST SHOW
     it('shold show a SINGLE team on /teams/<id> GET', () => {
-        chai.request(server)
+        return chai.request(server)
         .get(`/teams/${teamId}`)
         .then(res => {
             res.should.have.status(200);
@@ -69,7 +69,7 @@ describe('Team', () => {
 
     // TEST UPDATE
     it('should update a SINGLE team on /teams/<id> PUT', () => {
-        chai.request(server)
+        return chai.request(server)
         .put(`/teams/${teamId}`)
         .send({ 'rank': 200 })
         .then(res => {
@@ -80,7 +80,7 @@ describe('Team', () => {
 
     // TEST DELETE
     it('should delete a SINGLE team on /teams/<id> DELETE', () => {
-        chai.request(server)
+        return chai.request(server)
         .delete(`/teams/${teamId}`)
         .then(res => {
             res.should.have.status(200);
