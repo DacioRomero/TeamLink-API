@@ -114,7 +114,7 @@ router.put('/api/players/:playerId/comments/:id', (req, res) => {
 // DESTROY Comment
 // Browser
 router.delete('/players/:playerId/comments/:id', (req, res) => {
-    Comment.findByIdAndRemove(req.params.id).lean()
+    Comment.findByIdAndDelete(req.params.id).lean()
     .then(comment => {
         res.redirect(`/players/${comment.playerId}/comments`);
     })
@@ -123,7 +123,7 @@ router.delete('/players/:playerId/comments/:id', (req, res) => {
 
 // API
 router.delete('/api/players/:playerId/comments/:id', (req, res) => {
-    Comment.findByIdAndRemove(req.params.id).lean()
+    Comment.findByIdAndDelete(req.params.id).lean()
     .then(comment => {
         res.status(200).send(comment);
     })
