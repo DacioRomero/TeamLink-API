@@ -22,7 +22,7 @@ describe('Player', () => {
         .then(res => {
             res.should.have.status(200)
             res.should.be.html;
-        })
+        });
     });
 
     // TEST NEW
@@ -32,7 +32,7 @@ describe('Player', () => {
         .then(res => {
             res.should.have.status(200);
             res.should.be.html;
-        })
+        });
     });
 
     let playerId;
@@ -46,7 +46,7 @@ describe('Player', () => {
             res.should.have.status(200);
             res.should.be.html;
             playerId = res.redirects[0].substring(res.redirects[0].lastIndexOf('/') + 1)
-        })
+        });
     });
 
     // TEST SHOW
@@ -56,7 +56,7 @@ describe('Player', () => {
         .then(res => {
             res.should.have.status(200);
             res.should.be.html;
-        })
+        });
     });
 
     // TEST EDIT
@@ -66,7 +66,7 @@ describe('Player', () => {
         .then(res => {
             res.should.have.status(200);
             res.should.be.html;
-        })
+        });
     });
 
     // TEST UPDATE
@@ -77,7 +77,7 @@ describe('Player', () => {
         .then(res => {
             res.should.have.status(200);
             res.should.be.html;
-        })
+        });
     });
 
     // TEST DELETE
@@ -87,7 +87,7 @@ describe('Player', () => {
         .then(res => {
             res.should.have.status(200);
             res.should.be.html;
-        })
+        });
     });
 
     after(() => {

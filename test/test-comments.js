@@ -18,7 +18,7 @@ const samplePlayer = {
 const sampleComment = {
     battletag: 'Jayne#21795',
     content: 'We\'d like you on our team'
-}
+};
 
 describe('Comment', () => {
     let playerId;
@@ -27,7 +27,7 @@ describe('Comment', () => {
         return Player.create(samplePlayer)
         .then(player => {
             playerId = player._id;
-        })
+        });
     });
 
     describe('Browser', () => {
@@ -38,7 +38,7 @@ describe('Comment', () => {
             .then(res => {
                 res.should.have.status(200);
                 res.should.be.html;
-            })
+            });
         });
 
         // TEST NEW
@@ -48,7 +48,7 @@ describe('Comment', () => {
             .then(res => {
                 res.should.have.status(200);
                 res.should.be.html;
-            })
+            });
         });
 
         let commentId;
@@ -60,13 +60,13 @@ describe('Comment', () => {
             .then(res => {
                 res.should.have.status(200);
                 res.should.be.html;
-            })
+            });
         });
 
         // TEST CREATE
         it('should create a SINGLE comment on /players/<playerId>/comments POST', () => {
             const url = `/players/${playerId}/comments`;
-            const fullComment = Object.assign({}, sampleComment, { playerId: playerId })
+            const fullComment = Object.assign({}, sampleComment, { playerId: playerId });
 
             return chai.request(server)
             .post(url)
@@ -75,7 +75,7 @@ describe('Comment', () => {
                 res.should.have.status(200);
                 res.should.be.html;
                 commentId = res.redirects[0].substring(res.redirects[0].lastIndexOf('/') + 1);
-            })
+            });
         });
 
         // TEST SHOW
@@ -87,8 +87,8 @@ describe('Comment', () => {
             .then(res => {
                 res.should.have.status(200);
                 res.should.be.html;
-            })
-        })
+            });
+        });
 
         // TEST EDIT
         it('should edit a SINGLE comment on /players/<playerId>/comments/<id> GET', () => {
@@ -99,7 +99,7 @@ describe('Comment', () => {
             .then(res => {
                 res.should.have.status(200);
                 res.should.be.html;
-            })
+            });
         });
 
         // TEST UPDATE
@@ -112,7 +112,7 @@ describe('Comment', () => {
             .then(res => {
                 res.should.have.status(200);
                 res.should.be.html;
-            })
+            });
         });
 
         // TEST DELETE
@@ -124,11 +124,11 @@ describe('Comment', () => {
             .then(res => {
                 res.should.have.status(200);
                 res.should.be.html;
-            })
+            });
         });
 
         after(() => {
-            return Comment.findByIdAndDelete(commentId).lean()
+            return Comment.findByIdAndDelete(commentId).lean();
         });
     });
 
@@ -140,7 +140,7 @@ describe('Comment', () => {
             .then(res => {
                 res.should.have.status(200);
                 res.should.be.json;
-            })
+            });
         });
 
         let commentId;
@@ -148,7 +148,7 @@ describe('Comment', () => {
         // TEST CREATE
         it('should create a SINGLE comment on /api/players/<playerId>/comments POST', () => {
             const url = `/api/players/${playerId}/comments`;
-            const fullComment = Object.assign({}, sampleComment, { playerId: playerId })
+            const fullComment = Object.assign({}, sampleComment, { playerId: playerId });
 
             return chai.request(server)
             .post(url)
@@ -156,8 +156,8 @@ describe('Comment', () => {
             .then(res => {
                 res.should.have.status(200);
                 res.should.be.json;
-                commentId = res.body._id
-            })
+                commentId = res.body._id;
+            });
         });
 
         // TEST SHOW
@@ -169,8 +169,8 @@ describe('Comment', () => {
             .then(res => {
                 res.should.have.status(200);
                 res.should.be.json;
-            })
-        })
+            });
+        });
 
         // TEST UPDATE
         it('should update a SINGLE comment on /api/players/<playerId>/comments/<id> PUT', () => {
@@ -182,7 +182,7 @@ describe('Comment', () => {
             .then(res => {
                 res.should.have.status(200);
                 res.should.be.json;
-            })
+            });
         });
 
         // TEST DELETE
@@ -194,15 +194,15 @@ describe('Comment', () => {
             .then(res => {
                 res.should.have.status(200);
                 res.should.be.json;
-            })
+            });
         });
 
         after(() => {
-            return Comment.findByIdAndDelete(commentId).lean()
+            return Comment.findByIdAndDelete(commentId).lean();
         });
     });
 
     after(() => {
-        return Player.findByIdAndDelete(playerId).lean()
+        return Player.findByIdAndDelete(playerId).lean();
     });
 });

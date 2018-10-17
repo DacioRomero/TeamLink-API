@@ -20,7 +20,7 @@ router.get('/players/:playerId/comments/:id/edit', (req, res) => {
 // INDEX Comment
 // Browser
 router.get('/players/:playerId/comments', (req, res) => {
-    const playerId = req.params.playerId
+    const playerId = req.params.playerId;
 
     Comment.find({ playerId: playerId }).lean()
     .then(comments => {
@@ -61,7 +61,7 @@ router.post('/api/players/:playerId/comments', (req, res) => {
     .catch(error => {
         console.error(error);
         res.status(400).send(error);
-    });;
+    });
 });
 
 
@@ -84,7 +84,7 @@ router.get('/api/players/:playerId/comments/:id', (req, res) => {
     .catch(error => {
         console.error(error);
         res.status(400).send(error);
-    });;
+    });
 });
 
 
@@ -133,4 +133,4 @@ router.delete('/api/players/:playerId/comments/:id', (req, res) => {
     });
 });
 
-module.exports = router
+module.exports = router;

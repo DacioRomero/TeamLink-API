@@ -49,7 +49,7 @@ commentForm.addEventListener("submit", function (e) {
         ${comments.innerHTML}`;
 
         $(commentModal).modal('hide'); // jQuery required to close modal
-        e.target.reset()
+        e.target.reset();
     })
     .catch(console.error);
 });
