@@ -26,6 +26,7 @@ commentForm.addEventListener("submit", function (e) {
 
     var formData = new FormData(e.target);
     var commentObject = {};
+
     formData.forEach(function (value, key) {
         commentObject[key] = value;
     });

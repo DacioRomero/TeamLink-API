@@ -61,7 +61,7 @@ router.put('/players/:id', (req, res) => {
 // DESTROY Player
 router.delete('/players/:id', (req, res) => {
     Promise.all([
-        Player.findByIdAndRemove(req.params.id).lean(),
+        Player.findByIdAndDelete(req.params.id).lean(),
         Comment.deleteMany({ playerId: req.params.id }).lean()
     ])
     .then(() => {

@@ -1,8 +1,8 @@
 /* public/css/main.css */
-.card .player-icon {
+.card-img-top.icon {
     background-position: center center;
     background-size: cover;
     width: 100%;
-    height:0;
+    height: 0;
     padding-bottom: 100%
 }

@@ -2,23 +2,21 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../app');
 const should = chai.should();
-const Player = require('../models/player');
+const Team = require('../models/team');
 
 chai.use(chaiHttp);
 
-const samplePlayer = {
-    "battletag": "Dacio#11366",
-    "description": "Looking to play professionally soon",
-    "rank": 3198,
-    "role": "Flex",
-    "iconURL": "https://via.placeholder.com/200x200"
+const sampleTeam = {
+    name: 'NRG',
+    description: 'Fueled by the energy of talented individuals, this particular team represents the concentrated ambition to achieve one goal. That goal: to build the ideal esports team for many years to come.',
+    iconURL: 'https://static1.squarespace.com/static/56e0692bf699bb8546ef30d8/5874ea11f5e231cac817be56/59e1286d49fc2bb9042978de/1507928175465/NRG+Logo+Light+Background.png?format=2500w',
 };
 
-describe('Player', () => {
+describe('Team', () => {
     // TEST INDEX
-    it('should index ALL players on /players GET', () => {
+    it('should index ALL teams on /teams GET', () => {
         return chai.request(server)
-        .get('/players')
+        .get('/teams')
         .then(res => {
             res.should.have.status(200)
             res.should.be.html;
@@ -26,33 +24,33 @@ describe('Player', () => {
     });
 
     // TEST NEW
-    it('should display new form on /players/new GET', () => {
+    it('should display new form on /teams/new GET', () => {
         return chai.request(server)
-        .get('/players/new')
+        .get('/teams/new')
         .then(res => {
             res.should.have.status(200);
             res.should.be.html;
         });
     });
 
-    let playerId;
+    let teamId;
 
     // TEST CREATE
-    it('should create a SINGLE player on /players POST', () => {
+    it('should create a SINGLE team on /teams POST', () => {
         return chai.request(server)
-        .post('/players')
-        .send(samplePlayer)
+        .post('/teams')
+        .send(sampleTeam)
         .then(res => {
             res.should.have.status(200);
             res.should.be.html;
-            playerId = res.redirects[0].substring(res.redirects[0].lastIndexOf('/') + 1)
+            teamId = res.redirects[0].substring(res.redirects[0].lastIndexOf('/') + 1)
         });
     });
 
     // TEST SHOW
-    it('shold show a SINGLE player on /players/<id> GET', () => {
+    it('shold show a SINGLE team on /teams/<id> GET', () => {
         return chai.request(server)
-        .get(`/players/${playerId}`)
+        .get(`/teams/${teamId}`)
         .then(res => {
             res.should.have.status(200);
             res.should.be.html;
@@ -60,9 +58,9 @@ describe('Player', () => {
     });
 
     // TEST EDIT
-    it('should edit a SINGLE player on /player/<id>/edit GET', () => {
+    it('should edit a SINGLE team on /player/<id>/edit GET', () => {
         return chai.request(server)
-        .get(`/players/${playerId}/edit`)
+        .get(`/teams/${teamId}/edit`)
         .then(res => {
             res.should.have.status(200);
             res.should.be.html;
@@ -70,9 +68,9 @@ describe('Player', () => {
     });
 
     // TEST UPDATE
-    it('should update a SINGLE player on /players/<id> PUT', () => {
+    it('should update a SINGLE team on /teams/<id> PUT', () => {
         return chai.request(server)
-        .put(`/players/${playerId}`)
+        .put(`/teams/${teamId}`)
         .send({ 'rank': 200 })
         .then(res => {
             res.should.have.status(200);
@@ -81,9 +79,9 @@ describe('Player', () => {
     });
 
     // TEST DELETE
-    it('should delete a SINGLE player on /players/<id> DELETE', () => {
+    it('should delete a SINGLE team on /teams/<id> DELETE', () => {
         return chai.request(server)
-        .delete(`/players/${playerId}`)
+        .delete(`/teams/${teamId}`)
         .then(res => {
             res.should.have.status(200);
             res.should.be.html;
@@ -91,6 +89,6 @@ describe('Player', () => {
     });
 
     after(() => {
-        return Player.findByIdAndDelete(playerId).lean();
+        return Team.findByIdAndDelete(teamId).lean();
     });
 });
