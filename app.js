@@ -32,6 +32,7 @@ app.use(express.static(path.join(__dirname, '/public')));
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/teamlink', { useNewUrlParser: true });
 
 // ROUTES
+app.use(require('./controllers/teams'));
 app.use(require('./controllers/players'));
 app.use(require('./controllers/comments'));
 app.use(require('./controllers/index'));
