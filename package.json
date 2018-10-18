@@ -4,7 +4,7 @@
   "description": "Source code for [teamlink.dacio.app](https://teamlink.dacio.app)",
   "main": "app.js",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --recursive",
     "start": "node app.js",
     "start:dev": "nodemon"
   },
