@@ -13,7 +13,7 @@ comments.addEventListener('click', function (e) {
     if (deleteButton.classList.contains('deleteComment')) {
         var commentId = deleteButton.getAttribute("data-comment-id")
 
-        axios.delete(`/api/players/${playerId}/comments/${commentId}`)
+        axios.delete(`/api/v1/players/${playerId}/comments/${commentId}`)
         .then(function (response) {
             document.getElementById(commentId).parentElement.remove();
         })
@@ -31,7 +31,7 @@ commentForm.addEventListener("submit", function (e) {
         commentObject[key] = value;
     });
 
-    axios.post(`/api/players/${playerId}/comments`, commentObject)
+    axios.post(`/api/v1/players/${playerId}/comments`, commentObject)
     .then(function (response) {
         comment = response.data;
         // TODO: Replace with server side rendering?
