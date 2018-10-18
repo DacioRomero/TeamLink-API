@@ -18,7 +18,6 @@ router.get('/players/:playerId/comments/:id/edit', (req, res) => {
 });
 
 // INDEX Comment
-// Browser
 router.get('/players/:playerId/comments', (req, res) => {
     const playerId = req.params.playerId;
 
@@ -29,21 +28,7 @@ router.get('/players/:playerId/comments', (req, res) => {
     .catch(console.error);
 });
 
-// API
-router.get('/api/players/:playerId/comments', (req, res) => {
-    Comment.find({ playerId: req.params.playerId }).lean()
-    .then(comments => {
-        res.status(200).send(comments);
-    })
-    .catch(error => {
-        console.error(error);
-        res.status(400).send(error);
-    });
-});
-
-
 // CREATE Comment
-// Browser
 router.post('/players/:playerId/comments', (req, res) => {
     Comment.create(req.body)
     .then(comment => {
@@ -52,21 +37,7 @@ router.post('/players/:playerId/comments', (req, res) => {
     .catch(console.error);
 });
 
-// API
-router.post('/api/players/:playerId/comments', (req, res) => {
-    Comment.create(req.body)
-    .then(comment => {
-        res.status(200).send(comment);
-    })
-    .catch(error => {
-        console.error(error);
-        res.status(400).send(error);
-    });
-});
-
-
 // SHOW Comment
-// Browser
 router.get('/players/:playerId/comments/:id', (req, res) => {
     Comment.findById(req.params.id).lean()
     .then(comment => {
@@ -75,21 +46,7 @@ router.get('/players/:playerId/comments/:id', (req, res) => {
     .catch(console.error);
 });
 
-// API
-router.get('/api/players/:playerId/comments/:id', (req, res) => {
-    Comment.findById(req.params.id).lean()
-    .then(comment => {
-        res.status(200).send(comment);
-    })
-    .catch(error => {
-        console.error(error);
-        res.status(400).send(error);
-    });
-});
-
-
 // UPDATE Comment
-// Browser
 router.put('/players/:playerId/comments/:id', (req, res) => {
     Comment.findByIdAndUpdate(req.params.id, req.body).lean()
     .then(comment => {
@@ -98,39 +55,13 @@ router.put('/players/:playerId/comments/:id', (req, res) => {
     .catch(console.error);
 });
 
-// API
-router.put('/api/players/:playerId/comments/:id', (req, res) => {
-    Comment.findByIdAndUpdate(req.params.id, req.body)
-    .then(comment => {
-        res.status(200).send(comment);
-    })
-    .catch(error => {
-        console.error(error);
-        res.status(400).send(error);
-    });
-});
-
-
 // DESTROY Comment
-// Browser
 router.delete('/players/:playerId/comments/:id', (req, res) => {
     Comment.findByIdAndDelete(req.params.id).lean()
     .then(comment => {
         res.redirect(`/players/${comment.playerId}/comments`);
     })
     .catch(console.error);
-});
-
-// API
-router.delete('/api/players/:playerId/comments/:id', (req, res) => {
-    Comment.findByIdAndDelete(req.params.id).lean()
-    .then(comment => {
-        res.status(200).send(comment);
-    })
-    .catch(error => {
-        console.error(error);
-        res.status(400).send(error);
-    });
 });
 
 module.exports = router;
