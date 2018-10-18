@@ -36,6 +36,7 @@ app.use(require('./controllers/teams'));
 app.use(require('./controllers/players'));
 app.use(require('./controllers/comments'));
 app.use(require('./controllers/index'));
+app.use(require('./controllers/api/master'));
 
 // LISTENER
 if (require.main === module) {
