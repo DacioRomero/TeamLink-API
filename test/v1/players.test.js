@@ -1,10 +1,10 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const server = require('../../../app');
-const should = chai.should();
-const Player = require('../../../models/player');
+const server = require('../../server');
+const Player = require('../../models/player');
 
 chai.use(chaiHttp);
+chai.should();
 
 const samplePlayer = {
     "battletag": "Dacio#11366",
@@ -16,9 +16,9 @@ const samplePlayer = {
 
 describe('Player API v1', () => {
     // TEST INDEX
-    it('should index ALL players on /api/v1/players GET', () => {
+    it('should index ALL players on /v1/players GET', () => {
         return chai.request(server)
-        .get('/api/v1/players')
+        .get('/v1/players')
         .then(res => {
             res.should.have.status(200)
             res.should.be.json;
@@ -28,22 +28,22 @@ describe('Player API v1', () => {
     let playerId;
 
     // TEST CREATE
-    it('should create a SINGLE player on /api/v1/players POST', () => {
+    it('should create a SINGLE player on /v1/players POST', () => {
         return chai.request(server)
-        .post('/api/v1/players')
+        .post('/v1/players')
         .send(samplePlayer)
         .then(res => {
             res.should.have.status(200);
             res.should.be.json;
-            
+
             playerId = res.body._id;
         });
     });
 
     // TEST SHOW
-    it('shold show a SINGLE player on /api/v1/players/<id> GET', () => {
+    it('shold show a SINGLE player on /v1/players/<id> GET', () => {
         return chai.request(server)
-        .get(`/api/v1/players/${playerId}`)
+        .get(`/v1/players/${playerId}`)
         .then(res => {
             res.should.have.status(200);
             res.should.be.json;
@@ -51,9 +51,9 @@ describe('Player API v1', () => {
     });
 
     // TEST UPDATE
-    it('should update a SINGLE player on /api/v1/players/<id> PUT', () => {
+    it('should update a SINGLE player on /v1/players/<id> PUT', () => {
         return chai.request(server)
-        .put(`/api/v1/players/${playerId}`)
+        .put(`/v1/players/${playerId}`)
         .send({ 'rank': 200 })
         .then(res => {
             res.should.have.status(200);
@@ -62,9 +62,9 @@ describe('Player API v1', () => {
     });
 
     // TEST DELETE
-    it('should delete a SINGLE player on /api/v1/players/<id> DELETE', () => {
+    it('should delete a SINGLE player on /v1/players/<id> DELETE', () => {
         return chai.request(server)
-        .delete(`/api/v1/players/${playerId}`)
+        .delete(`/v1/players/${playerId}`)
         .then(res => {
             res.should.have.status(200);
             res.should.be.json;

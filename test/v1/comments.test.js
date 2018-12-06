@@ -1,10 +1,10 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const server = require('../../../app');
-const should = chai.should();
-const Player = require('../../../models/player');
-const Comment = require('../../../models/comment')
+const server = require('../../server');
+const Player = require('../../models/player');
+const Comment = require('../../models/comment')
 
+chai.should();
 chai.use(chaiHttp);
 
 const samplePlayer = {
@@ -27,16 +27,15 @@ describe('Comment API v1', () => {
         return Player.create(samplePlayer)
         .then(player => {
             playerId = player._id;
-            console.log(playerId);
         });
     });
 
     let commentId;
 
     // TEST INDEX
-    it('should index ALL comments on /api/v1/players/<playerId>/comments GET', () => {
+    it('should index ALL comments on /v1/players/<playerId>/comments GET', () => {
         return chai.request(server)
-        .get(`/api/v1/players/${playerId}/comments`)
+        .get(`/v1/players/${playerId}/comments`)
         .then(res => {
             res.should.have.status(200);
             res.should.be.json;
@@ -44,8 +43,8 @@ describe('Comment API v1', () => {
     });
 
     // TEST CREATE
-    it('should create a SINGLE comment on /api/v1/players/<playerId>/comments POST', () => {
-        const url = `/api/v1/players/${playerId}/comments`;
+    it('should create a SINGLE comment on /v1/players/<playerId>/comments POST', () => {
+        const url = `/v1/players/${playerId}/comments`;
         const fullComment = Object.assign({}, sampleComment, { playerId: playerId });
 
         return chai.request(server)
@@ -54,14 +53,14 @@ describe('Comment API v1', () => {
         .then(res => {
             res.should.have.status(200);
             res.should.be.json;
-            
+
             commentId = res.body._id;
         });
     });
 
     // TEST SHOW
-    it('should show a SINGLE comment on /api/v1/players/<playerId>/comments/<id> GET', () => {
-        const url = `/api/v1/players/${playerId}/comments/${commentId}`;
+    it('should show a SINGLE comment on /v1/players/<playerId>/comments/<id> GET', () => {
+        const url = `/v1/players/${playerId}/comments/${commentId}`;
 
         return chai.request(server)
         .get(url)
@@ -72,8 +71,8 @@ describe('Comment API v1', () => {
     });
 
     // TEST UPDATE
-    it('should update a SINGLE comment on /api/v1/players/<playerId>/comments/<id> PUT', () => {
-        const url = `/api/v1/players/${playerId}/comments/${commentId}`;
+    it('should update a SINGLE comment on /v1/players/<playerId>/comments/<id> PUT', () => {
+        const url = `/v1/players/${playerId}/comments/${commentId}`;
 
         return chai.request(server)
         .put(url)
@@ -85,8 +84,8 @@ describe('Comment API v1', () => {
     });
 
     // TEST DELETE
-    it('should delete a SINGLE comment on /api/v1/players/<playerId>/comments/<id> DELETE', () => {
-        let url = `/api/v1/players/${playerId}/comments/${commentId}`;
+    it('should delete a SINGLE comment on /v1/players/<playerId>/comments/<id> DELETE', () => {
+        let url = `/v1/players/${playerId}/comments/${commentId}`;
 
         return chai.request(server)
         .delete(url)

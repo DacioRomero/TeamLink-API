@@ -17,18 +17,16 @@
   "homepage": "https://github.com/DacioRomero/TeamLink#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "dotenv": "^6.1.0",
+    "dotenv": "^6.2.0",
     "express": "^4.16.4",
-    "express-handlebars": "^3.0.0",
-    "handlebars-helpers": "^0.10.0",
     "method-override": "^3.0.0",
-    "mongoose": "^5.3.4",
+    "mongoose": "^5.3.15",
     "path": "^0.12.7"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-http": "^4.2.0",
     "mocha": "^5.2.0",
-    "nodemon": "^1.18.4"
+    "nodemon": "^1.18.7"
   }
 }

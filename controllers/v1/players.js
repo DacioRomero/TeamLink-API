@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Player = require('../../../models/player');
-const Comment = require('../../../models/comment');
+const Player = require('../../models/player');
+const Comment = require('../../models/comment');
 
 // INDEX Player
 router.get('/players', (req, res) => {

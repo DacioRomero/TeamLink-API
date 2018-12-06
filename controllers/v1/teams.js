@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Team = require('../../../models/team');
+const Team = require('../../models/team');
 
 // INDEX Team
 router.get('/teams', (req, res) => {
