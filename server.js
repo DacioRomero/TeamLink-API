@@ -19,7 +19,9 @@ app.use(methodOverride('_method'));
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/teamlink', { useNewUrlParser: true });
 
 // ROUTES
-app.use(require('./controllers/master'));
+app.use('/user', require('./controllers/user'));
+app.use('/players', require('./controllers/players'));
+app.use('/teams', require('./controllers/teams'));
 
 // LISTENER
 if (require.main === module) {

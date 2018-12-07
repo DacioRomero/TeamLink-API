@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const Team = require('../../models/team');
+const Team = require('../models/team');
 
 // INDEX Team
-router.get('/teams', (req, res) => {
+router.get('/', (req, res) => {
     Team.find().lean()
     .then(teams => {
         res.status(200).send(teams);
@@ -15,7 +15,7 @@ router.get('/teams', (req, res) => {
 });
 
 // CREATE Team
-router.post('/teams', (req, res) => {
+router.post('/', (req, res) => {
     Team.create(req.body)
     .then(team => {
         res.status(200).send(team);
@@ -27,7 +27,7 @@ router.post('/teams', (req, res) => {
 });
 
 // SHOW Team
-router.get('/teams/:id', (req, res) => {
+router.get('/:id', (req, res) => {
     Team.findById(req.params.id).lean()
     .then(team => {
         res.status(200).send(team);
@@ -39,7 +39,7 @@ router.get('/teams/:id', (req, res) => {
 });
 
 // UPDATE Team
-router.put('/teams/:id', (req, res) => {
+router.put('/:id', (req, res) => {
     Team.findByIdAndUpdate(req.params.id, req.body).lean()
     .then(team => {
         res.status(200).send(team);
@@ -51,7 +51,7 @@ router.put('/teams/:id', (req, res) => {
 });
 
 // DESTROY Team
-router.delete('/teams/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
     Team.findByIdAndDelete(req.params.id).lean()
     .then(team => {
         res.status(200).send(team);

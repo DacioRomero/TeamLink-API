@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const Player = require('../../models/player');
-const Comment = require('../../models/comment');
+const Player = require('../models/player');
 
 // INDEX Player
-router.get('/players', (req, res) => {
+router.get('/', (req, res) => {
     Player.find().lean()
     .then(players => {
         res.status(200).send(players)
@@ -16,7 +15,7 @@ router.get('/players', (req, res) => {
 });
 
 // CREATE Player
-router.post('/players', (req, res) => {
+router.post('/', (req, res) => {
     Player.create(req.body)
     .then(player => {
         res.status(200).send(player);
@@ -28,7 +27,7 @@ router.post('/players', (req, res) => {
 });
 
 // SHOW Player
-router.get('/players/:id', (req, res) => {
+router.get('/:id', (req, res) => {
     Player.findById(req.params.id).lean()
     .then(player => {
         res.status(200).send(player);
@@ -40,7 +39,7 @@ router.get('/players/:id', (req, res) => {
 });
 
 // UPDATE Player
-router.put('/players/:id', (req, res) => {
+router.put('/:id', (req, res) => {
     Player.findByIdAndUpdate(req.params.id, req.body).lean()
     .then(player => {
         res.status(200).send(player);
@@ -52,7 +51,7 @@ router.put('/players/:id', (req, res) => {
 });
 
 // DESTROY Player
-router.delete('/players/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
     Player.findByIdAndDelete(req.params.id).lean()
     .then(player => {
         res.status(200).send(player);

@@ -1,7 +1,7 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const server = require('../../server');
-const Team = require('../../models/team');
+const server = require('../server');
+const Team = require('../models/team');
 
 chai.use(chaiHttp);
 chai.should();
@@ -14,9 +14,9 @@ const sampleTeam = {
 
 describe('Team API v1', () => {
     // TEST INDEX
-    it('should index ALL teams on /v1/teams GET', () => {
+    it('should index ALL teams on /teams GET', () => {
         return chai.request(server)
-        .get('/v1/teams')
+        .get('/teams')
         .then(res => {
             res.should.have.status(200)
             res.should.be.json;
@@ -26,9 +26,9 @@ describe('Team API v1', () => {
     let teamId;
 
     // TEST CREATE
-    it('should create a SINGLE team on /v1/teams POST', () => {
+    it('should create a SINGLE team on /teams POST', () => {
         return chai.request(server)
-        .post('/v1/teams')
+        .post('/teams')
         .send(sampleTeam)
         .then(res => {
             res.should.have.status(200);
@@ -39,9 +39,9 @@ describe('Team API v1', () => {
     });
 
     // TEST SHOW
-    it('shold show a SINGLE team on /v1/teams/<id> GET', () => {
+    it('shold show a SINGLE team on /teams/<id> GET', () => {
         return chai.request(server)
-        .get(`/v1/teams/${teamId}`)
+        .get(`/teams/${teamId}`)
         .then(res => {
             res.should.have.status(200);
             res.should.be.json;
@@ -49,9 +49,9 @@ describe('Team API v1', () => {
     });
 
     // TEST UPDATE
-    it('should update a SINGLE team on /v1/teams/<id> PUT', () => {
+    it('should update a SINGLE team on /teams/<id> PUT', () => {
         return chai.request(server)
-        .put(`/v1/teams/${teamId}`)
+        .put(`/teams/${teamId}`)
         .send({ 'rank': 200 })
         .then(res => {
             res.should.have.status(200);
@@ -60,9 +60,9 @@ describe('Team API v1', () => {
     });
 
     // TEST DELETE
-    it('should delete a SINGLE team on /v1/teams/<id> DELETE', () => {
+    it('should delete a SINGLE team on /teams/<id> DELETE', () => {
         return chai.request(server)
-        .delete(`/v1/teams/${teamId}`)
+        .delete(`/teams/${teamId}`)
         .then(res => {
             res.should.have.status(200);
             res.should.be.json;
