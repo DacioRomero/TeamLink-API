@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/register', (req, res) => {
     User.create(req.body)
     .then(user => {
-        const token = jwt.sign({ id: user._id }, process.env.SECRET, {
+        const token = jwt.sign({ _id: user._id }, process.env.SECRET, {
             expiresIn: 86400
         });
 
@@ -33,7 +33,7 @@ router.post('/login', (req, res) => {
 
             if(!isMatch) return res.status(500).send('Password is incorrect');
 
-            const token = jwt.sign({ id: user._id }, process.env.SECRET, {
+            const token = jwt.sign({ _id: user._id }, process.env.SECRET, {
                 expiresIn: 86400
             });
 

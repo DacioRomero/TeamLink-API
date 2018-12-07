@@ -9,8 +9,7 @@ const PlayerSchema = Schema({
     },
     battletag: {
         type: String,
-        required: true,
-        index: { unique: true }
+        required: true
     },
     description: String,
     rank: {

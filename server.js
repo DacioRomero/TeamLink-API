@@ -19,7 +19,7 @@ app.use(methodOverride('_method'));
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/teamlink', { useNewUrlParser: true });
 
 // ROUTES
-app.use('/user', require('./controllers/user'));
+app.use('/users', require('./controllers/users'));
 app.use('/players', require('./controllers/players'));
 app.use('/teams', require('./controllers/teams'));
 

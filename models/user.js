@@ -15,7 +15,15 @@ const UserSchema = Schema({
     password: {
         type: String,
         required: true,
-    }
+    },
+    players: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Player'
+    }],
+    teams: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Team'
+    }]
 });
 
 UserSchema.pre('save', function(next) {
