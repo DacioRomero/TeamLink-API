@@ -1,10 +1,16 @@
 // models/player.js
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-module.exports = mongoose.model('Player', {
+const PlayerSchema = Schema({
+    poster: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
     battletag: {
         type: String,
-        required: true
+        required: true,
+        index: { unique: true }
     },
     description: String,
     rank: {
@@ -18,5 +24,7 @@ module.exports = mongoose.model('Player', {
         enum: ['DPS', 'Support', 'Tank', 'Flex'],
         required: true
     },
-    iconURL: String
+    iconUrl: String
 });
+
+module.exports = mongoose.model('Player', PlayerSchema);

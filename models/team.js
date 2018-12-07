@@ -1,16 +1,22 @@
 // models/player.js
 const mongoose = require('mongoose');
-const ObjectId = mongoose.Schema.Types.ObjectId;
+const Schema = mongoose.Schema;
 
-module.exports = mongoose.model('Team', {
+const TeamSchema = Schema({
+    poster: {
+        type: Schema.Types.ObjectId,
+        required: true
+    },
     name: {
         type: String,
         required: true
     },
     description: String,
     players: [{
-        type: ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'Player'
     }],
-    iconURL: String
-});
+    iconUrl: String
+})
+
+module.exports = mongoose.model('Team', TeamSchema);

@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-module.exports = mongoose.model('comment', {
+const CommentSchema = Schema({
     playerId: {
         type: Schema.Types.ObjectId,
         ref: 'Player',
@@ -17,3 +17,5 @@ module.exports = mongoose.model('comment', {
         required: true
     }
 });
+
+module.exports = mongoose.model('comment', CommentSchema);
