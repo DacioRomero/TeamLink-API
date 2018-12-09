@@ -58,12 +58,12 @@ router.put('/:id', Authorize, (req, res) => {
 
     Player.findById(req.params.id)
     .then(player => {
-        if (player.poster._id == user._id) {
+        if (player.poster == user._id) {
             player.set(req.body)
             res.status(200).json(player)
             player.save()
         } else {
-            res.status(403).send('Player not owned by this user')
+            res.status(403).send('Player not owned by current user')
         }
     })
     .catch(error => {
@@ -72,23 +72,26 @@ router.put('/:id', Authorize, (req, res) => {
     });
 });
 
+
 // DESTROY Player
 router.delete('/:id', Authorize, (req, res) => {
-    const user = req.user;
+    Player.findById(req.params.id)
+    .then(player => {
+        if (player.poster == req.user._id) {
+            res.status(200).json(player);
+            player.remove();
 
-    Promise.all([
-        Player.findByIdAndDelete(req.params.id),
-        User.findById(user._id)
-    ])
-    .then(([player, user]) => {
-        res.status(200).json(player)
+            User.findById(req.user._id)
+            .then(user => {
+                const index = user.players.indexOf(player._id);
 
-        const index = user.players.indexOf(player._id);
-
-        if (index != -1) {
-            console.log('WORKED!')
-            user.players.splice(index, 1)
-            user.save();
+                if (index != -1) {
+                    user.players.splice(index, 1)
+                    user.save();
+                }
+            });
+        } else {
+            res.status(403).send('Player is not owned by current user');
         }
     })
     .catch(error => {
