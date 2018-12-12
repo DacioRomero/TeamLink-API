@@ -12,20 +12,15 @@ const CommentSchema = Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-    on: {
+    parent: {
         type: Schema.Types.ObjectId,
         required: true,
-        ref: 'onModel'
+        ref: 'parentModel'
     },
-    onModel: {
+    parentModel: {
         type: String,
-        required: true,
-        enum: ['Player']
+        required: true
     }
 });
-
-CommentSchema
-    .pre('find', Populate('poster'))
-    .pre('findOne', Populate('poster'));
 
 module.exports = mongoose.model('comment', CommentSchema);

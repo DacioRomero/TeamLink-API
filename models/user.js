@@ -23,6 +23,10 @@ const UserSchema = Schema({
     teams: [{
         type: Schema.Types.ObjectId,
         ref: 'Team'
+    }],
+    comments: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Comment'
     }]
 });
 

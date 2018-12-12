@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const server = require('../server');
 const Player = require('../models/player');
 const User = require('../models/user');
+const Comment = require('../models/comment');
 
 chai.use(chaiHttp);
 chai.should();
@@ -88,7 +89,66 @@ describe('Players', function () {
         res.should.be.json;
     });
 
-    after(() => {
+    describe('Comments', function() {
+        const sampleComment = {
+            content: "this is a test"
+        }
+
+        it('should index ALL comments on /players/<playerId>/comments GET', async function () {
+            const res = await chai.request(server)
+                .get(`/players/${playerId}/comments`);
+
+                res.should.have.status(200);
+            res.should.be.json;
+        });
+
+        let commentId;
+
+        it('should create a SINGLE comment on /players/<playerId>/comments POST', async function () {
+            const res = await chai.request(server)
+                .post(`/players/${playerId}/comments`)
+                .set('Authorization', `Bearer ${auth}`)
+                .send(sampleComment);
+
+            res.should.have.status(200);
+            res.should.be.json;
+
+            commentId = res.body._id;
+        });
+
+        it('should show a SINGLE comment on /players/<playerId>/comments/<id> GET', async function () {
+            const res = await chai.request(server)
+                .get(`/players/${playerId}/comments/${commentId}`)
+
+            res.should.have.status(200);
+            res.should.be.json;
+        });
+
+        it('should update a SINGLE comment on /players/<playerId>/comments/<id> PUT', async function () {
+            const res = await chai.request(server)
+                .put(`/players/${playerId}/comments/${commentId}`)
+                .set('Authorization', `Bearer ${auth}`)
+                .send({ content: "changed test comment" })
+
+            res.should.have.status(200);
+            res.should.be.json;
+        });
+
+        it('should delete a SINGLE comment on /players/<playerId>/comments/<id> DELETE', async function () {
+            const res = await chai.request(server)
+                .delete(`/players/${playerId}/comments/${commentId}`)
+                .set('Authorization', `Bearer ${auth}`)
+
+            res.should.have.status(200);
+            res.should.be.json;
+        });
+
+        after(function () {
+            return Comment.findByIdAndDelete(commentId);
+        })
+    });
+
+    after(function () {
         const userId = jwt.decode(auth)._id;
 
         return Promise.all([

@@ -2,9 +2,10 @@
 const express = require('express');
 const asyncHandler = require('express-async-handler');
 
+const commentController = require('./comments');
 const Team = require('../models/team');
 const User = require('../models/user');
-const Authorize = require('../utils/authorize')
+const verify = require('../utils/verify-authentication')
 
 const router = express.Router();
 
@@ -23,7 +24,7 @@ router.get('/:id', asyncHandler(async (req, res) => {
 }));
 
 // CREATE Team
-router.post('/', Authorize, asyncHandler(async (req, res) => {
+router.post('/', verify, asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     const team = new Team(req.body);
 
@@ -39,7 +40,7 @@ router.post('/', Authorize, asyncHandler(async (req, res) => {
 }));
 
 // UPDATE Team
-router.put('/:id', Authorize, asyncHandler(async (req, res) => {
+router.put('/:id', verify, asyncHandler(async (req, res) => {
     const team = await Team.findById(req.params.id);
 
     if (team.poster != req.user._id) {
@@ -53,7 +54,7 @@ router.put('/:id', Authorize, asyncHandler(async (req, res) => {
 }));
 
 // DESTROY Team
-router.delete('/:id', Authorize, asyncHandler(async (req, res) => {
+router.delete('/:id', verify, asyncHandler(async (req, res) => {
     const [user, team] = await Promise.all([
         User.findById(req.user._id),
         Team.findById(req.params.id)
@@ -76,5 +77,7 @@ router.delete('/:id', Authorize, asyncHandler(async (req, res) => {
 
     res.status(200).send(team);
 }));
+
+router.use('/:parentId/comments', commentController('Team'));
 
 module.exports = router;
