@@ -2,6 +2,8 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+
 
 const server = require('../server');
 const Player = require('../models/player');
@@ -159,3 +161,7 @@ describe('Players', function () {
         ]);
     });
 });
+
+after(function () {
+    return mongoose.connection.close();
+})

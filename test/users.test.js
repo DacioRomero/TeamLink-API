@@ -2,6 +2,8 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const jwt = require('jsonwebtoken')
+const mongoose = require('mongoose');
+
 
 const server = require('../server');
 const User = require('../models/user');
@@ -44,3 +46,7 @@ describe('Users', function () {
         await User.findByIdAndDelete(userId);
     });
 });
+
+after(function () {
+    return mongoose.connection.close();
+})

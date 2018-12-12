@@ -24,10 +24,6 @@ const PlayerSchema = Schema({
         required: true
     },
     iconUrl: String,
-    comments: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Comment'
-    }]
 });
 
 module.exports = mongoose.model('Player', PlayerSchema);

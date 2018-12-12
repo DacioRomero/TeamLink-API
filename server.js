@@ -21,6 +21,10 @@ app.use('/users', require('./controllers/users'));
 app.use('/players', require('./controllers/players'));
 app.use('/teams', require('./controllers/teams'));
 
+app.get('/', (req, res) => {
+    res.status(200).send('Documentation is available at: https://github.com/DacioRomero/TeamLink-API/wiki');
+});
+
 // LISTENER
 if (require.main === module) {
     const port = process.env.PORT || 3000;
