@@ -89,7 +89,7 @@ describe('Teams', function () {
 
     describe('Comments', function() {
         const sampleComment = {
-            content: "this is a test"
+            content: 'this is a test'
         }
 
         it('should index ALL comments on /teams/<teamId>/comments GET', async function () {
@@ -126,7 +126,7 @@ describe('Teams', function () {
             const res = await chai.request(server)
                 .put(`/teams/${teamId}/comments/${commentId}`)
                 .set('Authorization', `Bearer ${auth}`)
-                .send({ content: "changed test comment" })
+                .send({ content: 'changed test comment' })
 
             res.should.have.status(200);
             res.should.be.json;

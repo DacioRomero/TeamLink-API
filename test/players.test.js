@@ -13,11 +13,11 @@ chai.should();
 
 describe('Players', function () {
     const samplePlayer = {
-        "battletag": "Dacio#11366",
-        "description": "Looking to play professionally soon",
-        "rank": 3198,
-        "role": "Flex",
-        "iconURL": "https://via.placeholder.com/200x200"
+        'battletag': 'Dacio#11366',
+        'description': 'Looking to play professionally soon',
+        'rank': 3198,
+        'role': 'Flex',
+        'iconURL': 'https://via.placeholder.com/200x200'
     };
 
     let auth;
@@ -91,7 +91,7 @@ describe('Players', function () {
 
     describe('Comments', function() {
         const sampleComment = {
-            content: "this is a test"
+            content: 'this is a test'
         }
 
         it('should index ALL comments on /players/<playerId>/comments GET', async function () {
@@ -128,7 +128,7 @@ describe('Players', function () {
             const res = await chai.request(server)
                 .put(`/players/${playerId}/comments/${commentId}`)
                 .set('Authorization', `Bearer ${auth}`)
-                .send({ content: "changed test comment" })
+                .send({ content: 'changed test comment' })
 
             res.should.have.status(200);
             res.should.be.json;
