@@ -1,6 +1,6 @@
 // test/root.test.js
 const mongoose = require('mongoose');
 
-after(() => {
+after(function () {
     return mongoose.connection.close();
 })

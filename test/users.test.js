@@ -9,13 +9,13 @@ const User = require('../models/user');
 chai.should();
 chai.use(chaiHttp);
 
-describe('Users', function() {
+describe('Users', function () {
     const user = {
         username: 'tester',
         password: 'tester'
     };
 
-    it('should register', async function() {
+    it('should register', async function () {
         const originalCount = await User.countDocuments();
 
         const res = await chai.request(server)
@@ -29,7 +29,7 @@ describe('Users', function() {
         await User.findByIdAndDelete(userId);
     });
 
-    it('should login', async function() {
+    it('should login', async function () {
         await chai.request(server)
             .post('/users/register')
             .send(user)

@@ -89,7 +89,7 @@ describe('Players', function () {
         res.should.be.json;
     });
 
-    describe('Comments', function() {
+    describe('Comments', function () {
         const sampleComment = {
             content: 'this is a test'
         }
@@ -98,7 +98,7 @@ describe('Players', function () {
             const res = await chai.request(server)
                 .get(`/players/${playerId}/comments`);
 
-                res.should.have.status(200);
+            res.should.have.status(200);
             res.should.be.json;
         });
 
@@ -128,7 +128,9 @@ describe('Players', function () {
             const res = await chai.request(server)
                 .put(`/players/${playerId}/comments/${commentId}`)
                 .set('Authorization', `Bearer ${auth}`)
-                .send({ content: 'changed test comment' })
+                .send({
+                    content: 'changed test comment'
+                })
 
             res.should.have.status(200);
             res.should.be.json;

@@ -87,7 +87,7 @@ describe('Teams', function () {
         res.should.be.json;
     });
 
-    describe('Comments', function() {
+    describe('Comments', function () {
         const sampleComment = {
             content: 'this is a test'
         }
@@ -96,7 +96,7 @@ describe('Teams', function () {
             const res = await chai.request(server)
                 .get(`/teams/${teamId}/comments`);
 
-                res.should.have.status(200);
+            res.should.have.status(200);
             res.should.be.json;
         });
 
@@ -126,7 +126,9 @@ describe('Teams', function () {
             const res = await chai.request(server)
                 .put(`/teams/${teamId}/comments/${commentId}`)
                 .set('Authorization', `Bearer ${auth}`)
-                .send({ content: 'changed test comment' })
+                .send({
+                    content: 'changed test comment'
+                })
 
             res.should.have.status(200);
             res.should.be.json;
