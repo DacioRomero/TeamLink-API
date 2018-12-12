@@ -1,95 +1,80 @@
+// controllers/teams.js
 const express = require('express');
-const router = express.Router();
+const asyncHandler = require('express-async-handler');
+
 const Team = require('../models/team');
+const User = require('../models/user');
+const Authorize = require('../utils/authorize')
+
+const router = express.Router();
 
 // INDEX Team
-router.get('/', (req, res) => {
-    Team.find()
-    .then(teams => {
-        res.status(200).send(teams);
-    })
-    .catch(error => {
-        if(!res.headersSent) res.status(500).send('Server error');
-        console.error(error);
-    })
-});
+router.get('/', asyncHandler(async (req, res) => {
+    const teams = await Team.find().lean();
+
+    res.status(200).json(teams);
+}));
 
 // SHOW Team
-router.get('/:id', (req, res) => {
-    Team.findById(req.params.id)
-    .then(team => {
-        res.status(200).send(team);
-    })
-    .catch(error => {
-        if(!res.headersSent) res.status(500).send('Server error');
-        console.error(error);
-    })
-});
+router.get('/:id', asyncHandler(async (req, res) => {
+    const team = await Team.findById(req.params.id).lean();
+
+    res.status(200).json(team);
+}));
 
 // CREATE Team
-router.post('/', (req, res) => {
-    Team.create(Object.assign({ poster: req.user._id}, req.body))
-    .then(team => {
-        res.status(200).send(team);
+router.post('/', Authorize, asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+    const team = new Team(req.body);
 
-        return Promise.all([
-            User.findById(req.user._id),
-            team._id
-        ])
-    })
-    .then(([user, teamId]) => {
-        user.teams.push(teamId)
-        user.save();
-    })
-    .catch(error => {
-        if(!res.headersSent) res.status(500).send('Server error');
-        console.error(error);
-    });
-});
+    team.poster = req.user._id;
+    user.teams.push(team._id);
+
+    await Promise.all([
+        team.save(),
+        user.save()
+    ])
+
+    res.status(200).json(team);
+}));
 
 // UPDATE Team
-router.put('/:id', (req, res) => {
-    Team.findById(req.params.id)
-    .then(team => {
-        if(team.poster == req.user._id) {
-            team.set(req.body);
-            res.status(200).json(team);
-            team.save();
-        } else {
-            res.status(403).json('Team is not owned by current user');
-        }
-    })
-    .catch(error => {
-        if(!res.headersSent) res.status(500).send('Server error');
-        console.error(error);
-    });
-});
+router.put('/:id', Authorize, asyncHandler(async (req, res) => {
+    const team = await Team.findById(req.params.id);
+
+    if (team.poster != req.user._id) {
+        return res.status(403).send(`${team._id} not posted by current user`);
+    }
+
+    team.set(req.body);
+    await team.save();
+
+    res.status(200).json(team);
+}));
 
 // DESTROY Team
-router.delete('/:id', (req, res) => {
-    Team.findById(req.params.id)
-    .then(team => {
-        if (team.poster == req.user._id) {
-            res.status(200).json(team);
-            team.remove();
+router.delete('/:id', Authorize, asyncHandler(async (req, res) => {
+    const [user, team] = await Promise.all([
+        User.findById(req.user._id),
+        Team.findById(req.params.id)
+    ]);
 
-            User.findById(req.user._id)
-            .then(user => {
-                const index = user.teams.indexOf(team._id);
+    if (team.poster != user._id.toString()) {
+        return res.status(403).send(`${team._id} not posted by current user`);
+    }
 
-                if (index != -1) {
-                    user.teams.splice(index, 1)
-                    user.save();
-                }
-            });
-        } else {
-            res.status(403).send('Team is not owned by current user');
-        }
-    })
-    .catch(error => {
-        if(!res.headersSent) res.status(500).send('Server error');
-        console.error(error);
-    });
-});
+    const teamIndex = user.teams.indexOf(team._id);
+
+    if (teamIndex != -1) {
+        user.teams.splice(teamIndex, 1);
+    }
+
+    await Promise.all([
+        team.remove(),
+        user.save()
+    ])
+
+    res.status(200).send(team);
+}));
 
 module.exports = router;

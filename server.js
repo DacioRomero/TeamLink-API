@@ -1,7 +1,6 @@
 // app.js
 // DEPENDENCIES
 const express = require('express');
-const methodOverride = require('method-override')
 const bodyParser = require('body-parser');
 const path = require('path');
 const mongoose = require('mongoose');
@@ -13,10 +12,9 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(methodOverride('_method'));
 
 // DATABASE
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/teamlink', { useNewUrlParser: true });
+const db = mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/teamlink', { useNewUrlParser: true });
 
 // ROUTES
 app.use('/users', require('./controllers/users'));

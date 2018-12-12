@@ -1,77 +1,99 @@
+// test/players.test.js
 const chai = require('chai');
 const chaiHttp = require('chai-http');
+const jwt = require('jsonwebtoken');
+
 const server = require('../server');
 const Player = require('../models/player');
+const User = require('../models/user');
 
 chai.use(chaiHttp);
 chai.should();
 
-const samplePlayer = {
-    "battletag": "Dacio#11366",
-    "description": "Looking to play professionally soon",
-    "rank": 3198,
-    "role": "Flex",
-    "iconURL": "https://via.placeholder.com/200x200"
-};
+describe('Players', function () {
+    const samplePlayer = {
+        "battletag": "Dacio#11366",
+        "description": "Looking to play professionally soon",
+        "rank": 3198,
+        "role": "Flex",
+        "iconURL": "https://via.placeholder.com/200x200"
+    };
 
-describe('Player API v1', () => {
+    let auth;
+
+    before(async function () {
+        const res = await chai.request(server)
+            .post('/users/register')
+            .send({
+                username: 'players.test.js',
+                password: 'API'
+            });
+
+        auth = res.text;
+    });
+
     // TEST INDEX
-    it('should index ALL players on /players GET', () => {
-        return chai.request(server)
-        .get('/players')
-        .then(res => {
-            res.should.have.status(200)
-            res.should.be.json;
-        });
+    it('should index ALL players on /players GET', async function () {
+        const res = await chai.request(server)
+            .get('/players');
+
+        res.should.have.status(200);
+        res.should.be.json;
     });
 
     let playerId;
 
     // TEST CREATE
-    it('should create a SINGLE player on /players POST', () => {
-        return chai.request(server)
-        .post('/players')
-        .send(samplePlayer)
-        .then(res => {
-            res.should.have.status(200);
-            res.should.be.json;
+    it('should create a SINGLE players on /players POST', async function () {
+        const res = await chai.request(server)
+            .post('/players')
+            .set('Authorization', `Bearer ${auth}`)
+            .send(samplePlayer);
 
-            playerId = res.body._id;
-        });
+        res.should.have.status(200);
+        res.should.be.json;
+
+        playerId = res.body._id;
     });
 
     // TEST SHOW
-    it('shold show a SINGLE player on /players/<id> GET', () => {
-        return chai.request(server)
-        .get(`/players/${playerId}`)
-        .then(res => {
-            res.should.have.status(200);
-            res.should.be.json;
-        });
+    it('shold show a SINGLE player on /players/<id> GET', async function () {
+        const res = await chai.request(server)
+            .get(`/players/${playerId}`);
+
+        res.should.have.status(200);
+        res.should.be.json;
     });
 
     // TEST UPDATE
-    it('should update a SINGLE player on /players/<id> PUT', () => {
-        return chai.request(server)
-        .put(`/players/${playerId}`)
-        .send({ 'rank': 200 })
-        .then(res => {
-            res.should.have.status(200);
-            res.should.be.json;
-        });
+    it('should update a SINGLE player on /players/<id> PUT', async function () {
+        const res = await chai.request(server)
+            .put(`/players/${playerId}`)
+            .set('Authorization', `Bearer ${auth}`)
+            .send({
+                rank: 200
+            });
+
+        res.should.have.status(200);
+        res.should.be.json;
     });
 
     // TEST DELETE
-    it('should delete a SINGLE player on /players/<id> DELETE', () => {
-        return chai.request(server)
-        .delete(`/players/${playerId}`)
-        .then(res => {
-            res.should.have.status(200);
-            res.should.be.json;
-        });
+    it('should delete a SINGLE player on /players/<id> DELETE', async function () {
+        const res = await chai.request(server)
+            .delete(`/players/${playerId}`)
+            .set('Authorization', `Bearer ${auth}`);
+
+        res.should.have.status(200);
+        res.should.be.json;
     });
 
     after(() => {
-        return Player.findByIdAndDelete(playerId).lean();
+        const userId = jwt.decode(auth)._id;
+
+        return Promise.all([
+            Player.findByIdAndDelete(playerId),
+            User.findByIdAndDelete(userId)
+        ]);
     });
 });

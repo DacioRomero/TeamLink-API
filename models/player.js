@@ -23,7 +23,11 @@ const PlayerSchema = Schema({
         enum: ['DPS', 'Support', 'Tank', 'Flex'],
         required: true
     },
-    iconUrl: String
+    iconUrl: String,
+    comments: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Comment'
+    }]
 });
 
 module.exports = mongoose.model('Player', PlayerSchema);

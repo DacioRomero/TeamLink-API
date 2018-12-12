@@ -1,28 +1,29 @@
 {
-  "name": "teamlink",
+  "name": "teamlink-api",
   "version": "1.0.0",
-  "description": "Source code for [teamlink.dacio.app](https://teamlink.dacio.app)",
+  "description": "Source code for [teamlink.dacio.app](https://teamlink.dacio.app)'s API",
   "main": "server.js",
   "scripts": {
-    "test": "mocha --recursive --exit",
+    "test": "mocha",
     "start": "node server.js",
     "start:dev": "nodemon"
   },
-  "repository": "git+https://github.com/DacioRomero/TeamLink.git",
+  "repository": "git+https://github.com/DacioRomero/TeamLink-API.git",
   "author": "Dacio Romero <dacioromero@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/DacioRomero/TeamLink/issues"
+    "url": "https://github.com/DacioRomero/TeamLink-API/issues"
   },
-  "homepage": "https://github.com/DacioRomero/TeamLink#readme",
+  "homepage": "https://github.com/DacioRomero/TeamLink-API#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
+    "express-async-handler": "^1.1.4",
     "jsonwebtoken": "^8.4.0",
-    "method-override": "^3.0.0",
     "mongoose": "^5.3.15",
+    "mongoose-populate": "github:DacioRomero/mongoose-populate",
     "path": "^0.12.7"
   },
   "devDependencies": {

@@ -1,10 +1,14 @@
+// test/teams.test.js
 const chai = require('chai');
 const chaiHttp = require('chai-http');
+const jwt = require('jsonwebtoken');
+
 const server = require('../server');
 const Team = require('../models/team');
+const User = require('../models/user');
 
-chai.use(chaiHttp);
 chai.should();
+chai.use(chaiHttp);
 
 const sampleTeam = {
     name: 'NRG',
@@ -12,64 +16,82 @@ const sampleTeam = {
     iconURL: 'https://static1.squarespace.com/static/56e0692bf699bb8546ef30d8/5874ea11f5e231cac817be56/59e1286d49fc2bb9042978de/1507928175465/NRG+Logo+Light+Background.png?format=2500w',
 };
 
-describe('Team API v1', () => {
+describe('Teams', function () {
+    let auth;
+
+    before(async function () {
+        const res = await chai.request(server)
+            .post('/users/register')
+            .send({
+                username: 'teams.test.js',
+                password: 'API'
+            });
+
+        auth = res.text;
+    });
+
     // TEST INDEX
-    it('should index ALL teams on /teams GET', () => {
-        return chai.request(server)
-        .get('/teams')
-        .then(res => {
-            res.should.have.status(200)
-            res.should.be.json;
-        });
+    it('should index ALL teams on /teams GET', async function () {
+        const res = await chai.request(server)
+            .get('/teams');
+
+        res.should.have.status(200);
+        res.should.be.json;
     });
 
     let teamId;
 
     // TEST CREATE
-    it('should create a SINGLE team on /teams POST', () => {
-        return chai.request(server)
-        .post('/teams')
-        .send(sampleTeam)
-        .then(res => {
-            res.should.have.status(200);
-            res.should.be.json;
+    it('should create a SINGLE team on /teams POST', async function () {
+        const res = await chai.request(server)
+            .post('/teams')
+            .set('Authorization', `Bearer ${auth}`)
+            .send(sampleTeam);
 
-            teamId = res.body._id;
-        });
+        res.should.have.status(200);
+        res.should.be.json;
+
+        teamId = res.body._id;
     });
 
     // TEST SHOW
-    it('shold show a SINGLE team on /teams/<id> GET', () => {
-        return chai.request(server)
-        .get(`/teams/${teamId}`)
-        .then(res => {
-            res.should.have.status(200);
-            res.should.be.json;
-        });
+    it('shold show a SINGLE team on /teams/<id> GET', async function () {
+        const res = await chai.request(server)
+            .get(`/teams/${teamId}`);
+
+        res.should.have.status(200);
+        res.should.be.json;
     });
 
     // TEST UPDATE
-    it('should update a SINGLE team on /teams/<id> PUT', () => {
-        return chai.request(server)
-        .put(`/teams/${teamId}`)
-        .send({ 'rank': 200 })
-        .then(res => {
-            res.should.have.status(200);
-            res.should.be.json;
-        });
+    it('should update a SINGLE team on /teams/<id> PUT', async function () {
+        const res = await chai.request(server)
+            .put(`/teams/${teamId}`)
+            .set('Authorization', `Bearer ${auth}`)
+            .send({
+                description: 'Updated'
+            })
+
+        res.should.have.status(200);
+        res.should.be.json;
     });
 
     // TEST DELETE
-    it('should delete a SINGLE team on /teams/<id> DELETE', () => {
-        return chai.request(server)
-        .delete(`/teams/${teamId}`)
-        .then(res => {
-            res.should.have.status(200);
-            res.should.be.json;
-        });
+    it('should delete a SINGLE team on /teams/<id> DELETE', async function () {
+        const res = await chai.request(server)
+            .delete(`/teams/${teamId}`)
+            .set('Authorization', `Bearer ${auth}`)
+
+        res.should.have.status(200);
+        res.should.be.json;
     });
 
     after(() => {
-        return Team.findByIdAndDelete(teamId).lean();
+        const userId = jwt.decode(auth)._id;
+
+        return Promise.all([
+            Team.findByIdAndDelete(teamId),
+            User.findByIdAndDelete(userId)
+        ]);
     });
 });

@@ -1,4 +1,6 @@
+// controllers/players.js
 const express = require('express');
+const asyncHandler = require('express-async-handler');
 const Player = require('../models/player');
 const User = require('../models/user');
 
@@ -6,98 +8,68 @@ const router = express.Router();
 const Authorize = require('../utils/authorize');
 
 // INDEX Player
-router.get('/', (req, res) => {
-    Player.find().lean()
-    .then(players => {
-        res.status(200).send(players)
-    })
-    .catch(error => {
-        if(!res.headersSent) res.status(500).send('Server error');
-        console.error(error);
-    });
-});
+router.get('/', asyncHandler(async (req, res) => {
+    const players = await Player.find().lean();
+    res.status(200).json(players);
+}));
 
 // SHOW Player
-router.get('/:id', (req, res) => {
-    Player.findById(req.params.id).lean()
-    .then(player => {
-        res.status(200).send(player);
-    })
-    .catch(error => {
-        if(!res.headersSent) res.status(500).send('Server error');
-        console.error(error);
-    });
-});
+router.get('/:id', asyncHandler(async (req, res) => {
+    const player = await Player.findById(req.params.id).lean();
+    res.status(200).json(player);
+}));
 
 // CREATE Player
-router.post('/', Authorize, (req, res) => {
-    const user = req.user;
+router.post('/', Authorize, asyncHandler(async (req, res) => {
+    const player = new Player(req.body);
+    player.poster = req.user._id;
 
-    Player.create(Object.assign({ poster: user._id }, req.body))
-    .then(player => {
-        res.status(200).send(player);
+    const user = await User.findById(req.user._id)
+    user.players.unshift(player._id)
 
-        return Promise.all([
-            User.findById(user._id),
-            player._id
-        ]);
-    })
-    .then(([user, playerId]) => {
-        user.players.unshift(playerId);
-        user.save();
-    })
-    .catch(error => {
-        if(!res.headersSent) res.status(500).send('Server error');
-        console.error(error);
-    });
-});
+    await Promise.all([
+        player.save(),
+        user.save()
+    ]);
+
+    res.status(200).json(player);
+}));
 
 // UPDATE Player
-router.put('/:id', Authorize, (req, res) => {
-    const user = req.user;
+router.put('/:id', Authorize, asyncHandler(async (req, res) => {
+    const player = await Player.findById(req.params.id);
 
-    Player.findById(req.params.id)
-    .then(player => {
-        if (player.poster == user._id) {
-            player.set(req.body)
-            res.status(200).json(player)
-            player.save()
-        } else {
-            res.status(403).send('Player not owned by current user')
-        }
-    })
-    .catch(error => {
-        if(!res.headersSent) res.status(500).send('Server error');
-        console.error(error);
-    });
-});
+    if (player.poster != req.user._id) {
+        return res.status(403).send('Player not posted by current user');
+    }
 
+    player.set(req.body)
+    await player.save()
+
+    res.status(200).json(player)
+}));
 
 // DESTROY Player
-router.delete('/:id', Authorize, (req, res) => {
-    Player.findById(req.params.id)
-    .then(player => {
-        if (player.poster == req.user._id) {
-            res.status(200).json(player);
-            player.remove();
+router.delete('/:id', Authorize, asyncHandler(async (req, res) => {
+    const player = await Player.findById(req.params.id);
 
-            User.findById(req.user._id)
-            .then(user => {
-                const index = user.players.indexOf(player._id);
+    if (player.poster != req.user._id) {
+        return res.status(403).send('Player not posted by current user')
+    }
 
-                if (index != -1) {
-                    user.players.splice(index, 1)
-                    user.save();
-                }
-            });
-        } else {
-            res.status(403).send('Player is not owned by current user');
-        }
-    })
-    .catch(error => {
-        if(!res.headersSent) res.status(500).send('Server error');
-        console.error(error);
-    });
-});
+    const user = await User.findById(req.user._id);
+    const playerIndex = user.players.indexOf(player._id);
+
+    if (playerIndex != -1) {
+        user.players.splice(playerIndex, 1);
+    }
+
+    Promise.all([
+        player.remove(),
+        user.save()
+    ]);
+
+    res.status(200).json(player);
+}));
 
 module.exports = router;
