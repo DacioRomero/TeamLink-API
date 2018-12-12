@@ -10,12 +10,14 @@ const Authorize = require('../utils/authorize');
 // INDEX Player
 router.get('/', asyncHandler(async (req, res) => {
     const players = await Player.find().lean();
+
     res.status(200).json(players);
 }));
 
 // SHOW Player
 router.get('/:id', asyncHandler(async (req, res) => {
     const player = await Player.findById(req.params.id).lean();
+
     res.status(200).json(player);
 }));
 
@@ -24,8 +26,8 @@ router.post('/', Authorize, asyncHandler(async (req, res) => {
     const player = new Player(req.body);
     player.poster = req.user._id;
 
-    const user = await User.findById(req.user._id)
-    user.players.unshift(player._id)
+    const user = await User.findById(req.user._id);
+    user.players.unshift(player._id);
 
     await Promise.all([
         player.save(),
@@ -43,8 +45,8 @@ router.put('/:id', Authorize, asyncHandler(async (req, res) => {
         return res.status(403).send('Player not posted by current user');
     }
 
-    player.set(req.body)
-    await player.save()
+    player.set(req.body);
+    await player.save();
 
     res.status(200).json(player)
 }));

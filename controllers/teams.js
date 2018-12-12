@@ -33,7 +33,7 @@ router.post('/', Authorize, asyncHandler(async (req, res) => {
     await Promise.all([
         team.save(),
         user.save()
-    ])
+    ]);
 
     res.status(200).json(team);
 }));
@@ -72,7 +72,7 @@ router.delete('/:id', Authorize, asyncHandler(async (req, res) => {
     await Promise.all([
         team.remove(),
         user.save()
-    ])
+    ]);
 
     res.status(200).send(team);
 }));

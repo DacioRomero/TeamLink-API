@@ -26,6 +26,6 @@ const CommentSchema = Schema({
 
 CommentSchema
     .pre('find', Populate('poster'))
-    .pre('findOne', Populate('poster'))
+    .pre('findOne', Populate('poster'));
 
 module.exports = mongoose.model('comment', CommentSchema);
