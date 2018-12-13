@@ -1,0 +1,12 @@
+{
+    "extends": "airbnb-base",
+    "plugins": ["chai-friendly"],
+    "rules": {
+        "no-unused-expressions": 0,
+        "chai-friendly/no-unused-expressions": 2,
+        "no-underscore-dangle": 0
+    },
+    "env": {
+        "mocha": true
+    }
+}

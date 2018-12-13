@@ -10,53 +10,53 @@ const router = express.Router();
 
 // INDEX Player
 router.get('/', asyncHandler(async (req, res) => {
-    const players = await Player.find().lean();
+  const players = await Player.find().lean();
 
-    res.status(200).json(players);
+  res.status(200).json(players);
 }));
 
 // SHOW Player
 router.get('/:id', asyncHandler(async (req, res) => {
-    const player = await Player.findById(req.params.id).lean();
+  const player = await Player.findById(req.params.id).lean();
 
-    res.status(200).json(player);
+  res.status(200).json(player);
 }));
 
 // CREATE Player
 router.post('/', verify, asyncHandler(async (req, res) => {
-    const player = new Player(req.body);
-    player.poster = req.user._id;
+  const player = new Player(req.body);
+  player.poster = req.user._id;
 
-    await player.save();
+  await player.save();
 
-    res.status(200).json(player);
+  res.status(200).json(player);
 }));
 
 // UPDATE Player
 router.put('/:id', verify, asyncHandler(async (req, res) => {
-    const player = await Player.findById(req.params.id);
+  const player = await Player.findById(req.params.id);
 
-    if (player.poster != req.user._id) {
-        return res.status(403).send('Player not posted by current user');
-    }
+  if (player.poster.toString() !== req.user._id) {
+    return res.status(403).send('Player not posted by current user');
+  }
 
-    player.set(req.body);
-    await player.save();
+  player.set(req.body);
+  await player.save();
 
-    res.status(200).json(player)
+  return res.status(200).json(player);
 }));
 
 // DESTROY Player
 router.delete('/:id', verify, asyncHandler(async (req, res) => {
-    const player = await Player.findById(req.params.id);
+  const player = await Player.findById(req.params.id);
 
-    if (player.poster != req.user._id) {
-        return res.status(403).send('Player not posted by current user')
-    }
+  if (player.poster.toString() !== req.user._id) {
+    return res.status(403).send('Player not posted by current user');
+  }
 
-    await player.remove();
+  await player.remove();
 
-    res.status(200).json(player);
+  return res.status(200).json(player);
 }));
 
 router.use('/:parentId/comments', commentController('Player'));

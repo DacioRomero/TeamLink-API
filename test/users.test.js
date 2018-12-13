@@ -1,7 +1,7 @@
 // test/users.test.js
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
 
@@ -11,42 +11,40 @@ const User = require('../models/user');
 chai.should();
 chai.use(chaiHttp);
 
-describe('Users', function () {
-    const user = {
-        username: 'tester',
-        password: 'tester'
-    };
+describe('Users', () => {
+  const user = {
+    username: 'tester',
+    password: 'tester',
+  };
 
-    it('should register', async function () {
-        const originalCount = await User.countDocuments();
+  it('should register', async () => {
+    const originalCount = await User.countDocuments();
 
-        const res = await chai.request(server)
-            .post('/users/register')
-            .send(user);
+    const res = await chai.request(server)
+      .post('/users/register')
+      .send(user);
 
-        res.should.have.status(200);
-        originalCount.should.be.equal(await User.countDocuments() - 1);
+    res.should.have.status(200);
+    originalCount.should.be.equal(await User.countDocuments() - 1);
 
-        const userId = jwt.decode(res.text)._id;
-        await User.findByIdAndDelete(userId);
-    });
+    const userId = jwt.decode(res.text)._id;
+    await User.findByIdAndDelete(userId);
+  });
 
-    it('should login', async function () {
-        await chai.request(server)
-            .post('/users/register')
-            .send(user)
+  it('should login', async () => {
+    await chai.request(server)
+      .post('/users/register')
+      .send(user);
 
-        const res = await chai.request(server)
-            .post('/users/login')
-            .send(user);
+    const res = await chai.request(server)
+      .post('/users/login')
+      .send(user);
 
-        res.should.have.status(200);
+    res.should.have.status(200);
 
-        const userId = jwt.decode(res.text)._id;
-        await User.findByIdAndDelete(userId);
-    });
+    const userId = jwt.decode(res.text)._id;
+    await User.findByIdAndDelete(userId);
+  });
 });
 
-after(function () {
-    return mongoose.connection.close();
-})
+after(() => mongoose.connection.close());
